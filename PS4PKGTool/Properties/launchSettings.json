@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "PS4PKGTool": {
+      "commandName": "Project",
+      "commandLineArgs": "\"B:\\PKG\\Base + Update\\Disgaea 1 Complete\\CUSA13171.pkg\""
+    },
+    "Profile 1": {
+      "commandName": "Project"
+    }
+  }
+}

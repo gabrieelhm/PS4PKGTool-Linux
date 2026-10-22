@@ -1,0 +1,84 @@
+You are continuing work on PS4PKGTool at C:\Users\User\source\repos\PS4PKGTool
+
+CRITICAL: The previous session corrupted Main.cs, Main.Designer.cs, and Main.resx via git checkout -- they were reverted to the initial repo commit. ALL changes from BOTH the July 17 session AND the July 18-20 session were wiped from those three files. Other files (Program.cs, Settings, etc.) still have their session changes.
+
+The project currently compiles with 0 errors but Main.cs/Designer.cs are missing dozens of features.
+
+## CRITICAL RULES
+
+- **DO NOT TOUCH DarkUI** — It's at C:\Users\User\source\repos\DarkUI and has its own AI managing it. Never modify anything in that directory.
+- **ALL control initialization MUST go in Designer.cs** — Never create/modify controls programmatically in Main.cs or any other form .cs file. This keeps the VS designer working.
+- **Fixed the compilation, don't break it** — The project currently builds with 0 errors. Keep it that way.
+- **NEVER use git checkout or git reset** — Do not restore any files from git. All recovery must be done by rewriting the code from scratch based on this document.
+
+## REFERENCE
+
+The full development history is in `C:\Users\User\source\repos\PS4PKGTool\2026-07-17-045758-this-project-uploaded-to-github-repo-then-i-dow.txt` (2.1MB). Read specific sections from it as needed to understand how features were originally implemented. Look for `^❯` lines to find user requests and navigate the conversation.
+
+## SESSION HISTORY
+
+### July 17 Session (previous AI) — DESTROYED
+
+This session refactored tabPage7 with DarkUI controls:
+- Replaced TreeView -> DarkUI.Controls.DarkTreeView
+- Replaced ListView -> DarkUI.Controls.DarkListView
+- Added file-type icons (11 icons, IconFor() method mapping extensions)
+- Added filter textbox + ApplyFilter() + CollectMatches() + ExpandAncestors()
+- Added file size column (columnHeader10) + _fileSizes dictionary
+- Added context menus on treeview (expand/collapse) and listview (extract/copy path/copy name)
+- Added _filtering, _populating, _upItem, _allItems fields
+- Extraction fixes: both listview handlers use info.Node.FullPath
+- CtxExtractFolder_Click with preserveStructure:true
+- STDA thread fixes: ShowError/ShowInformation marshaled via this.Invoke()
+- Collapse/expand all with _filtering guard
+- Removed ListViewDraw.colorListViewHeader() calls
+- Removed save/restore tree state (was causing collapse bugs)
+
+### July 18-20 Session (this conversation) — PARTLY DESTROYED
+
+Changes that SURVIVED (in Main.cs from agent fix):
+- Rename handler refactored: 22 if-else chains -> GetRenameFormat() switch + name parsing
+- Confirmation dialog before rename
+- Active filter warning for "Rename All"
+- UpdatePKGFilename() no longer calls Read_PKG (uses Path.GetFileName/DirectoryName)
+- Thread safety: this.Enabled wrapped in Invoke in RenamePKG
+- SaveManifestAfterScan() called in RenamePKG RunWorkerCompleted
+- GetCategoryPriority() and RenamePKGByPriority() methods
+- 4 new menu items in Designer: renameAllPkg12ToolStripMenuItem1/2, renameSelectedPkg12ToolStripMenuItem1/2
+
+Changes that SURVIVED (in other files):
+- Program.cs: manifest startup flow (3-option dialog: Load Manifest / Scan Directory / Launch Empty)
+- Program.cs: ChooseStartupForm() routing
+- Program.cs: default settings string (removed show_directory_settings_at_startup)
+- SettingsManager.cs: PkgDirectories split fix (filter empty strings)
+- SettingsManager.cs: removed show_directory_settings_at_startup save/load
+- AppSettings.cs: removed ShowDirectorySettingsAtStartup property
+- Program Settings.cs: removed ShowThisAtStartup checkbox references (hidden)
+- PKG Directory Settings form fully deleted (3 files + directory removed)
+- ListViewDraw.cs deleted
+- IllegalNameCheck.cs: SanitizeFileName() method
+- New files: ManifestHelper.cs, AppMessageBox.cs/.Designer.cs, DOCUMENTATION.md
+- Manifest Loader forms (ManifestLoaderPrompt.cs/.Designer.cs, DropFolderPrompt.cs/.Designer.cs)
+- DarkUI repo at C:\Users\User\source\repos\DarkUI has its own AI
+
+## WHAT NEEDS TO BE REBUILT in Main.cs + Designer.cs
+
+1) SetOperationMenusEnabled(bool enabled) — disables 20+ menu items + 8 context menus + 3 buttons (btnExtractFullPKG, btnViewPKGData, btnSearchFileInTreeView) + filter split buttons when grid is empty. Settings, Refresh, Open Temp Dir stay enabled. Called from InitializeEmptyGrid() and PostPkgLoad()
+
+2) GetMissingDirectories() — returns List<string> of configured PKG directories that don't exist on disk
+
+3) In Form1_Load — before LoadPKGGridView, check GetMissingDirectories() and show warning if any are missing
+
+4) In PostPkgLoad — when no PKGs found but directories exist, show dialog with missing dirs + Yes/No to open Program Settings
+
+5) WireAllControls(subTabControl) removal (line ~131) — remove the second WireAllControls call that double-wires DragDrop
+
+6) PKGGridView_DragDrop — the original working code (no debounce hacks)
+
+7) PKGTreeView_ItemDrag + listView1_ItemDrag — drag-to-explorer extraction. Must use temp ASCII-safe path similar to ExtractSelectedPKGData. Folder drag-drop should be disabled (if node.Nodes.Count > 0 return; and if (isDir) continue;)
+
+8) Extraction error messages in ExtractFullPKG and ExtractSelectedPKGData — remove command-line arguments from user-facing ShowError dialogs, show orbis-pub-cmd stderr instead
+
+9) In InitializeEmptyGrid() — add SetOperationMenusEnabled(false) at end
+
+The project uses .NET 10.0-windows, DarkUI controls (DarkForm, DarkDataGridView, DarkButton, etc.), VisualStudioTabControl. ALL control initialization/field declarations MUST go in Designer.cs, never in Main.cs.

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>OrbisPkgTool</AssemblyName>
+    <RootNamespace>OrbisPkgTool</RootNamespace>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The project now lives at the repo root; the default compile glob would
+         otherwise pick up the sibling GUI and test projects' sources. -->
+    <Compile Remove="OrbisPkgTool.Gui/**/*.cs" />
+    <Compile Remove="OrbisPkgTool.Tests/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="OrbisPkgTool.Tests" />
+  </ItemGroup>
+
+</Project>

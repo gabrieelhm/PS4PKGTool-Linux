@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>PS4PKGTool</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Forms\**\*.cs" />
+    <Compile Remove="Properties\Settings.Designer.cs" />
+    <Compile Remove="Utilities\PkgInspection\PkgExtractionService.cs" />
+    <Compile Remove="Utilities\Ffpfsc\**\*.cs" />
+    <Compile Remove="Utilities\PkgMeta\PkgMetadata.cs" />
+    <Compile Remove="Utilities\PkgMeta\PkgMetadataReader.cs" />
+    <Compile Remove="Utilities\PkgMeta\PkgSystemVersion.cs" />
+    <Compile Remove="Utilities\PkgDirectoryScanner.cs" />
+    <Compile Remove="Utilities\TaskQueue\TaskQueueService.cs" />
+    <Compile Remove="obj-task-ui-validation/**/*.cs" />
+    <Compile Remove="artifacts\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Update="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ByteSize" Version="2.1.1" />
+    <PackageReference Include="ClosedXML" Version="0.102.0" />
+    <PackageReference Include="DotNetZip" Version="1.13.8" />
+    <PackageReference Include="GitHubUpdate" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="semver" Version="2.3.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Tomlyn" Version="0.19.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PS4PKGTool.Assets\PS4PKGTool.Assets.csproj" />
+    <ProjectReference Include="..\PS4PKGTool.Core\PS4PKGTool.Core.csproj" />
+    <ProjectReference Include="..\OrbisPkgTool\OrbisPkgTool\OrbisPkgTool.csproj" />
+  </ItemGroup>
+</Project>

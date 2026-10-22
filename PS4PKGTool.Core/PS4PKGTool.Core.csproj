@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <NoWarn>$(NoWarn);CA1707;CA1001;CA1859;CS8602;CS8600;CA1805;CA1822;CA5350;CA1512</NoWarn>
+    <AssemblyName>PS4PKGTool.Core</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OrbisPkgTool\OrbisPkgTool\OrbisPkgTool.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\PS4PKGTool\Utilities\TaskQueue\TaskQueueService.cs" Link="TaskQueue\TaskQueueService.cs" />
+    <Compile Include="..\PS4PKGTool\Utilities\Ffpfsc\**\*.cs" Link="Ffpfsc\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

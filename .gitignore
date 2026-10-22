@@ -1,0 +1,12 @@
+# Build & Publish Outputs
+[Bb]in/
+[Oo]bj/
+AppDir/
+*.AppImage
+*.user
+*.suo
+.vs/
+.idea/
+.vscode/
+*.tmp
+*.bak
